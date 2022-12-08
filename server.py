@@ -12,7 +12,8 @@ import torch
 #from keras.applications import vgg16
 import numpy as np
 from torchvision import transforms
-
+from PIL import ImageFile
+ImageFile.LOAD_TRUNCATED_IMAGES = True
 
 transform = transforms.Compose([               #[1]
     transforms.Resize(256),                    #[2]
