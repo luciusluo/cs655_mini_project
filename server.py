@@ -56,7 +56,9 @@ def predict(image):
     percentage = torch.nn.functional.softmax(out, dim=1)[0] * 100
     _, indices = torch.sort(out, descending=True)
     results = [(labels[idx], percentage[idx].item()) for idx in indices[0][:5]]
+    best_pred = results[0][0]
     print(results)
+    return best_pred
 
 
 def handle_client(client_socket, address):
@@ -72,9 +74,9 @@ def handle_client(client_socket, address):
             client_socket.close()
             break
         if image_bytes is not None:
-            client_socket.send(bytes("Received image!", encoding="utf-8"))
             image = Image.open(io.BytesIO(image_bytes))
-            predict(image)
+            best_pred = predict(image)
+            client_socket.send(bytes("Received image! The best prediction is: " + best_pred, encoding="utf-8"))
             #image_array = image.img_to_array(image_bytes)
             #print(image)            
             image_bytes = None
