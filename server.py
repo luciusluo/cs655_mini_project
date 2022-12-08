@@ -12,7 +12,6 @@ import torch
 #from keras.applications import vgg16
 import numpy as np
 from torchvision import transforms
-import matplotlib.pyplot as plt
 
 
 transform = transforms.Compose([               #[1]

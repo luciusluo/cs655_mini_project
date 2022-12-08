@@ -25,11 +25,14 @@ if __name__ == '__main__':
 
         # HBHGqchjyxlc22!
         # Send cmd and compute RTT/TPUT
-        image_file = open('./image_send/'+cmd, 'rb')
-        image_data = image_file.read(4000000)
-        clientSocket.send(image_data) 
-        sentenceRecv = clientSocket.recv(2048).decode()
-        print(sentenceRecv)
+        if cmd not in dir_list:
+            print("Your input image is not in current folder. Please select from the available images!")
+        else:
+            image_file = open('./image_send/'+cmd, 'rb')
+            image_data = image_file.read(4000000)
+            clientSocket.send(image_data) 
+            sentenceRecv = clientSocket.recv(2048).decode()
+            print(sentenceRecv)
 
     #clientSocket.close() 
 
