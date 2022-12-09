@@ -23,16 +23,27 @@ if __name__ == '__main__':
         print(dir_list)
         cmd = input('Please choose an image to send from the above options: \n') 
 
-        # HBHGqchjyxlc22!
         # Send cmd and compute RTT/TPUT
         if cmd not in dir_list:
             print("Your input image is not in current folder. Please select from the available images!")
         else:
             image_file = open('./image_send/'+cmd, 'rb')
-            image_data = image_file.read(4000000)
-            clientSocket.send(image_data) 
+            image_data = image_file.read(400000000)
+            # 1. compute RTT and throughput
+            start_time = round(time.time() * 1000)
+            clientSocket.send(image_data)
             sentenceRecv = clientSocket.recv(2048).decode()
+            end_time = round(time.time() * 1000)
+            RTT = end_time - start_time
+            file_size = os.path.getsize('./image_send/'+cmd)
+            throughput = file_size * 8 / RTT * 1000
+            print("RTT in ms: ",RTT)
+            print("File Size is : ", file_size, "bytes")
+            print("Throughput is: ", throughput, "bps")
             print(sentenceRecv)
+            
+      #clientSocket.close() 
 
-    #clientSocket.close() 
+
+
 
