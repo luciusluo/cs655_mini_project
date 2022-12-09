@@ -65,24 +65,36 @@ def predict(image):
 def handle_client(client_socket, address):
     print(f'Server connected to {address}')
     while True:
-        try:
-            image_bytes = client_socket.recv(4000000)
-            print(f'Receive an image from Client {address}' )
+        client_socket.setblocking(0)
+        ready = select.select([client_socket], [], [], 20)
+        image_bytes = None
+        if ready[0]:
+            try:
+                image_bytes = client_socket.recv(400000000)
+                #print(f'Receive an image from Client {address}' )
             #file = open('./image_recv/images.jpeg', 'wb')
             #file.write(image)
-        except socket.error as e:
-            print(f'Client {address} forcibly disconnected with {e}.')
-            client_socket.close()
-            break
+            except socket.error as e:
+                print(f'Client {address} forcibly disconnected with {e}.')
+                client_socket.close()
+                break
         if image_bytes is not None:
-            image = Image.open(io.BytesIO(image_bytes))
+            #print(image_bytes)
+            im_BytesIO = io.BytesIO(image_bytes)
+            im_BytesIO.seek(0)
+            try:
+                image = Image.open(im_BytesIO)
+            except PIL.UnidentifiedImageError:
+                #image_bytes = None
+                continue
+            print(f'Receive an image from Client {address}')
             best_pred = predict(image)
+            image_bytes = None
             client_socket.send(bytes("Received image! The best prediction is: " + best_pred, encoding="utf-8"))
             #image_array = image.img_to_array(image_bytes)
             #print(image)            
-            image_bytes = None
-            
-            
+
+
 
 if __name__ == "__main__":
     if len(sys.argv) != 2:
