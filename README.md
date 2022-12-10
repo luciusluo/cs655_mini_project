@@ -7,6 +7,8 @@
 2. Use ssh to login to any client node
    1. Run command
       ```python
+      cd cs655_mini_project
       python3 client.py server1.yuxiaominiproject.ch-geni-net.instageni.sox.net 5001
       ```
-   3. 
+   2. Choose image to classify by inputing the name of the images from available options, i.e., ```hamster.jpeg```
+   3. The prediction will be sent back and displayed on client's temrinal. 
