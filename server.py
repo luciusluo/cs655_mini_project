@@ -14,6 +14,8 @@ import numpy as np
 from torchvision import transforms
 from PIL import ImageFile
 ImageFile.LOAD_TRUNCATED_IMAGES = True
+import select
+import PIL
 
 transform = transforms.Compose([               #[1]
     transforms.Resize(256),                    #[2]
